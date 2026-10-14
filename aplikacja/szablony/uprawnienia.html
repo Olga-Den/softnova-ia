@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block tytul %}wykazy{% endblock %}
+{% block tresc %}
+<h1>Wykazy uprawnień (WF-17)</h1>
+<p class="opis">Dzięki temu, że rola wyznacza maksimum, zawsze można ustalić, do czego użytkownik może w ogóle uzyskać
+  dostęp, oraz kto ma dostęp do obiektu – to podstawa recertyfikacji.</p>
+
+<div class="karta">
+  <form method="get" action="/uprawnienia" class="wiersz">
+    <div style="flex:2"><label for="uzytkownik">Uprawnienia osoby</label>
+      <select id="uzytkownik" name="uzytkownik">
+        {% for o in osoby %}<option value="{{ o.id }}" {{ 'selected' if osoba and o.id == osoba.id }}>{{ o.imie_nazwisko }} – {{ ROLE[o.rola_funkcyjna].nazwa }}</option>{% endfor %}
+      </select></div>
+    <div><button>Pokaż</button></div>
+  </form>
+  {% if osoba %}
+    <h3>{{ osoba.imie_nazwisko }} – {{ ROLE[osoba.rola_funkcyjna].nazwa }} ({{ osoba.poziom }})</h3>
+    <p class="drobny">Upoważnienie RODO (WT7):
+      {% if osoba.upowaznienie and osoba.upowaznienie.wazne(czas) %}{{ osoba.upowaznienie.zakres|sort|join(', ') }}{% else %}brak{% endif %};
+      oświadczenia o poufności (WT1): {{ osoba.oswiadczenia_nda|sort|join(', ') or 'brak' }}</p>
+    <table>
+      <tr><th>Źródło</th><th>Zasób</th><th>Operacje</th><th>Warunki</th><th>Ważne do</th><th>Ostatnie użycie</th></tr>
+      {% for w in wykaz %}
+        <tr><td>{{ w.zrodlo }}</td><td>{{ w.zasob }} <span class="drobny">{{ ZASOBY[w.zasob].nazwa }}</span></td>
+          <td><strong>{{ w.operacje }}</strong></td><td>{{ w.warunki }}</td><td>{{ w.wazne_do }}</td>
+          <td>{{ w.ostatnie_uzycie|czas }}</td></tr>
+      {% endfor %}
+    </table>
+  {% endif %}
+</div>
+
+<div class="karta">
+  <form method="get" action="/uprawnienia" class="wiersz">
+    <div style="flex:2"><label for="obiekt">Kto ma dostęp do obiektu (teraz, z urządzenia firmowego w biurze)</label>
+      <select id="obiekt" name="obiekt">
+        {% for grupa, lista in obiekty.items() %}
+          <optgroup label="{{ grupa }}">{% for o in lista %}<option value="{{ o.id }}" {{ 'selected' if o.id == wybrany_obiekt }}>{{ o.nazwa }}</option>{% endfor %}</optgroup>
+        {% endfor %}
+      </select></div>
+    <div><button>Sprawdź</button></div>
+  </form>
+  {% if dostep is not none %}
+    <p><strong>{{ dostep|length }}</strong> osób ma dostęp.</p>
+    <table>
+      <tr><th>Osoba</th><th>Rola</th><th>Operacje</th></tr>
+      {% for w in dostep %}<tr><td>{{ w.imie_nazwisko }}</td><td>{{ w.rola }}</td><td><strong>{{ w.operacje }}</strong></td></tr>{% endfor %}
+    </table>
+  {% endif %}
+</div>
+{% endblock %}

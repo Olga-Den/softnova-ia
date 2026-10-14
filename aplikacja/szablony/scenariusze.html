@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block tytul %}scenariusze{% endblock %}
+{% block tresc %}
+<h1>Scenariusze zagrożeń SZ1–SZ10 i zwykła praca</h1>
+<p class="opis">Każdy scenariusz uruchamia się na świeżej kopii przykładowej organizacji (w pamięci – nie zmienia bazy
+  pokazu). Scenariusze zagrożeń z tabeli 3.2 powinny kończyć się odmową, scenariusze zwykłej pracy – zezwoleniem (M6).</p>
+<p><a class="przycisk" href="/scenariusze?uruchom=wszystkie">Uruchom wszystkie</a>
+  {% if wyniki %}<span style="margin-left:12px"><strong>Zgodnych z oczekiwanymi: {{ zgodne }} / {{ wyniki|length }}</strong></span>{% endif %}</p>
+<div class="karta">
+<table>
+  <tr><th>ID</th><th>Scenariusz</th><th>Żądanie</th><th>Oczekiwane</th><th>Wynik</th><th></th></tr>
+  {% for p in przypadki %}
+    {% set d = wyniki.get(p.id) %}
+    <tr>
+      <td><strong>{{ p.id }}</strong></td>
+      <td>{{ p.opis }}</td>
+      <td><code>{{ p.konto }}</code> → {{ p.operacja }} → <code>{{ p.obiekt }}</code></td>
+      <td>{{ p.oczekiwany }}{% if p.reguly %}<br><span class="drobny">{{ p.reguly|sort|join(', ') }}</span>{% endif %}</td>
+      <td>
+        {% if d %}
+          <span class="znacznik {{ 'ok' if d.wynik.value == p.oczekiwany else 'nie' }}">{{ d.wynik.value }} (krok {{ d.krok }})</span>
+          <details><summary>uzasadnienie</summary><ul>{% for l in d.uzasadnienie %}<li class="drobny">{{ l }}</li>{% endfor %}</ul>
+            {% for s in d.sygnaly %}<div class="sygnal">⚠ {{ s }}</div>{% endfor %}</details>
+        {% endif %}
+      </td>
+      <td><a href="/scenariusze?uruchom={{ p.id }}">uruchom</a></td>
+    </tr>
+  {% endfor %}
+</table>
+</div>
+{% endblock %}

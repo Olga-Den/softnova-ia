@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block tytul %}wnioski{% endblock %}
+{% block tresc %}
+<h1>Wnioski o uprawnienia (WF-15, tabela 3.9)</h1>
+<p class="opis">Wniosek → automatyczne sprawdzenie katalogu (WF-06) i warunków twardych → akceptacja wg hierarchii
+  zatwierdzeń (KW4: przełożony i właściciel) → automatyczna realizacja na czas określony. Nikt nie akceptuje własnego
+  wniosku ani wniosku, który go dotyczy (SO6).</p>
+{% if not konto %}<div class="komunikat blad">Najpierw wybierz konto z listy u góry strony.</div>{% else %}
+
+{% if do_akceptacji %}
+<div class="karta">
+  <h2>Do Twojej akceptacji ({{ do_akceptacji|length }})</h2>
+  <table>
+    <tr><th>Wniosek</th><th>Dla</th><th>Uprawnienie</th><th>Wymagane akceptacje</th><th></th></tr>
+    {% for w in do_akceptacji %}
+      <tr><td>{{ w.id }}<br><span class="drobny">{{ w.zlozony_o|czas }}</span></td>
+        <td>{{ uzytkownicy[w.beneficjent_id].imie_nazwisko }}{% if w.wnioskujacy_id != w.beneficjent_id %}<br><span class="drobny">złożył(a): {{ uzytkownicy[w.wnioskujacy_id].imie_nazwisko }}</span>{% endif %}</td>
+        <td>{{ w.opis() }}<br><span class="drobny">{{ w.uzasadnienie }}</span></td>
+        <td>{% for x in w.wymagania %}<span class="znacznik {{ 'ok' if x.udzielona_przez else '' }}">{{ x.rola }}{% if x.udzielona_przez %} ✔ {{ uzytkownicy[x.udzielona_przez].imie_nazwisko }}{% endif %}</span><br>{% endfor %}</td>
+        <td style="white-space:nowrap">
+          <form class="inline" method="post" action="/wnioski/{{ w.id }}/akceptuj"><button class="maly zielony">Akceptuj</button></form>
+          <form class="inline" method="post" action="/wnioski/{{ w.id }}/odrzuc"><button class="maly czerwony">Odrzuć</button></form>
+        </td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+
+<div class="siatka">
+  <form method="post" action="/wnioski" class="karta">
+    <h2>Złóż wniosek</h2>
+    <label for="pozycja">Uprawnienie z katalogu Twojej roli</label>
+    <select id="pozycja" name="pozycja">
+      <option value="">— inne (pola poniżej) —</option>
+      {% for p in pozycje %}
+        {% set ops = p.operacje|map(attribute='value')|sort|join('') %}
+        <option value="{{ p.zasob }}|{{ ops }}|{{ p.typ_rekordu or '' }}">{{ p.zasob }} {{ ops }}{% if p.typ_rekordu %} [{{ p.typ_rekordu }}]{% endif %} – {{ p.opis }} ({{ 'na wniosek' if p.sposob == 'wniosek' else 'automatycznie: ' ~ p.sposob }})</option>
+      {% endfor %}
+    </select>
+    <div class="wiersz">
+      <div><label for="zasob">albo zasób</label>
+        <select id="zasob" name="zasob"><option value=""></option>{% for z in ZASOBY.values() %}<option value="{{ z.id }}">{{ z.id }} {{ z.nazwa }}</option>{% endfor %}</select></div>
+      <div><label for="operacje">operacje</label><input id="operacje" name="operacje" placeholder="np. R albo RW"></div>
+      <div><label for="typ_rekordu">typ rekordu</label><input id="typ_rekordu" name="typ_rekordu" placeholder="opcjonalnie"></div>
+    </div>
+    <div class="wiersz">
+      <div><label for="okres_dni">Na ile dni</label><input id="okres_dni" name="okres_dni" type="number" value="90" min="1"></div>
+      <div><label for="beneficjent">Dla kogo</label>
+        <select id="beneficjent" name="beneficjent"><option value="">dla siebie</option>
+          {% for x in podwladni %}<option value="{{ x.id }}">{{ x.imie_nazwisko }} (podwładny)</option>{% endfor %}</select></div>
+    </div>
+    <label for="uzasadnienie">Uzasadnienie</label><input id="uzasadnienie" name="uzasadnienie" placeholder="np. konfiguracja potoku">
+    <button>Złóż wniosek</button>
+  </form>
+
+  <div class="karta">
+    <h2>Twoje wnioski</h2>
+    {% if not moje %}<p class="drobny">Brak wniosków.</p>{% endif %}
+    {% for w in moje %}
+      <div style="border-bottom:1px solid var(--linia); padding:6px 0">
+        <strong>{{ w.id }}</strong> – {{ w.opis() }}
+        <span class="znacznik {{ 'ok' if w.status.value == 'zrealizowany' else ('nie' if 'odrzucony' in w.status.value else 'uwaga') }}">{{ w.status.value }}</span>
+        {% if w.powod %}<div class="drobny">{{ w.powod }} {% for r in w.reguly %}<span class="znacznik nie">{{ r }}</span>{% endfor %}</div>{% endif %}
+        {% for x in w.wymagania %}<div class="drobny">{{ x.rola }}: {% if x.udzielona_przez %}✔ {{ uzytkownicy[x.udzielona_przez].imie_nazwisko }}{% else %}czeka na {% for k in x.kandydaci %}{{ uzytkownicy[k].imie_nazwisko }}{{ ' / ' if not loop.last }}{% endfor %}{% endif %}</div>{% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

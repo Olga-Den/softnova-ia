@@ -1,0 +1,12 @@
+﻿czynność;żądań;odmów
+scenariusze zwykłej pracy ZP01–ZP23 (przykładowa organizacja);23;0
+każda osoba czyta intranet (Z2);199;0
+członkowie zespołów A czytają repozytorium swojego projektu;67;0
+programiści A zapisują w repozytorium swojego projektu;35;0
+programiści i testerzy B czytają moduł produktu SaaS (Z5);35;0
+członkowie zespołów pracują z zadaniami własnego zespołu (Z3);348;0
+account managerowie czytają karty przypisanych klientów (Z10);7;0
+analitycy czytają widoki raportowe;5;0
+księgowi czytają przelewy (Z12);5;0
+programista plemienia B na dyżurze czyta infrastrukturę produkcji (RE1);1;0
+DevOps/SRE aktywuje administratora Z8 w sesji i pracuje na produkcji (R, M);18;0

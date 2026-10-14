@@ -1,0 +1,45 @@
+﻿ID;scenariusz;oczekiwane;wynik PDP;reguły w uzasadnieniu;zgodne
+SZ1;programista zespołu klienta X czyta repozytorium klienta Y;odmów;odmów (krok 1);WT1, RC1;tak
+SZ2a;kontraktor B2B po wygaśnięciu umowy loguje się do CI/CD;odmów;odmów (krok 1);WT3;tak
+SZ2b;kontraktor B2B po wygaśnięciu umowy odczytuje sekrety potoku;odmów;odmów (krok 1);WT3, WF-15;tak
+SZ3a;programista przeniesiony z plemienia B nie ma już dostępu do produkcji;odmów;odmów (krok 6);RE1;tak
+SZ3b;po przeniesieniu nie zapisuje w zadaniach dawnego zespołu (RC12 – tylko odczyt);odmów;odmów (krok 2);RC1;tak
+SZ4a;przejęte konto programisty poza dyżurem – odczyt bazy klientów;odmów;odmów (krok 6);RE4;tak
+SZ4b;przejęte konto na dyżurze, ale z urządzenia prywatnego;odmów;odmów (krok 1);WT2, RC8;tak
+SZ5a;księgowy sam zatwierdza przelew na rzecz fikcyjnego kontrahenta;odmów;odmów (krok 2);RC13, SO3;tak
+SZ5b;główna księgowa zatwierdza przelew, który sama przygotowała;odmów;odmów (krok 3);SO3;tak
+SZ6a;członek IT nadaje sobie dostęp w IAM ze zwykłego konta;odmów;odmów (krok 6);– (domyślna odmowa: brak uprawnienia w roli i katalogu);tak
+SZ6b;członek IT z konta administracyjnego bez aktywnej roli w sesji;odmów;odmów (krok 6);– (domyślna odmowa: brak uprawnienia w roli i katalogu);tak
+SZ6c;członek IT z konta administracyjnego odczytuje dane kadrowe;odmów;odmów (krok 6);– (domyślna odmowa: brak uprawnienia w roli i katalogu);tak
+SZ7a;programista zatwierdza własną zmianę w kodzie;odmów;odmów (krok 3);SO1;tak
+SZ7b;programista zatwierdza własne wdrożenie na produkcję;odmów;odmów (krok 3);SO2;tak
+SZ8a;stażysta usuwa repozytorium;odmów;odmów (krok 6);– (domyślna odmowa: brak uprawnienia w roli i katalogu);tak
+SZ8b;stażysta zapisuje poza własną gałęzią;odmów;odmów (krok 2);RC9;tak
+SZ10;account manager eksportuje pełne dane klienta prowadzonego przez innych;odmów;odmów (krok 2);RC3;tak
+UP1;account manager bez upoważnienia RODO otwiera kartę swojego klienta;odmów;odmów (krok 1);WT7;tak
+USL1;potok CI/CD wdraża wydanie, którego nikt nie zatwierdził;odmów;odmów (krok 3);SO2;tak
+USL2;ktoś loguje się interaktywnie na konto usługowe potoku;odmów;odmów (krok 6);WF-13;tak
+ZP01;programista czyta wiki;zezwól;zezwól (krok 4);WT3;tak
+ZP02;programista czyta zadania zespołu;zezwól;zezwól (krok 4);WT3, WT1, RC1;tak
+ZP03;programista czyta repozytorium projektu;zezwól;zezwól (krok 4);WT3, WT1, RC8, RC1;tak
+ZP04;programista zapisuje w repozytorium projektu;zezwól;zezwól (krok 4);WT3, WT1, RC8, RC1;tak
+ZP05;programista składa wniosek w IAM;zezwól;zezwól (krok 4);WT3, WT2, WT7, RC8;tak
+ZP06;inny programista zespołu zatwierdza zmianę;zezwól;zezwól (krok 4);WT3, WT1, RC8, RC1, SO1;tak
+ZP07;tester odbiera testy zmiany;zezwól;zezwól (krok 4);WT3, WT1, RC8, RC1, SO9;tak
+ZP08;PO zatwierdza wdrożenie;zezwól;zezwól (krok 4);WT3, WT1, RC8, RC1, SO2;tak
+ZP09;stażysta zapisuje we własnej gałęzi;zezwól;zezwól (krok 4);WT3, WT1, RC8, RC1, RC9;tak
+ZP10;programista na dyżurze czyta infrastrukturę produkcji;zezwól;zezwól (krok 5);WT3, WT2, WT7, RC8, RE1;tak
+ZP11;programista na dyżurze modyfikuje infrastrukturę przez VPN;zezwól;zezwól (krok 5);WT3, WT2, WT7, RC8, RE1;tak
+ZP12;główna księgowa zatwierdza przelew do 50 000 zł;zezwól;zezwól (krok 4);WT3, WT7, RC8, RC13, SO3;tak
+ZP13;COO zatwierdza przelew powyżej 50 000 zł;zezwól;zezwól (krok 4);WT3, WT7, RC8, RC13, SO3;tak
+ZP14;księgowy czyta przelew;zezwól;zezwól (krok 4);WT3, WT7, RC8;tak
+ZP15;account manager czyta kartę swojego klienta;zezwól;zezwól (krok 4);WT3, WT7, RC8, RC3;tak
+ZP16;account manager aktualizuje kartę swojego klienta;zezwól;zezwól (krok 4);WT3, WT7, RC8, RC3;tak
+ZP17;account manager czyta dane podstawowe innego klienta;zezwól;zezwól (krok 4);WT3, WT7, RC8, RC3;tak
+ZP18;specjalista kadr czyta dane kadrowe;zezwól;zezwól (krok 4);WT3, WT2, WT7, RC8, RC14;tak
+ZP19;specjalista kadr czyta dane o zdrowiu;zezwól;zezwól (krok 4);WT3, WT2, WT7, RC8, RC14;tak
+ZP20;kierownik HR zatwierdza listę płac;zezwól;zezwól (krok 4);WT3, WT2, WT7, RC8, RC13, RC14, SO4;tak
+ZP21;analityk czyta widok raportowy;zezwól;zezwól (krok 4);WT3, WT7, RC8, RC17;tak
+ZP22;potok CI/CD wdraża wydanie zatwierdzone przez PO;zezwól;zezwól (krok 4);WT3, WT2, RC8, SO2;tak
+ZP23;account manager z ważnym upoważnieniem RODO czyta kartę klienta;zezwól;zezwól (krok 4);WT3, WT7, RC8, RC3;tak
+SZ1-uog.;pełna organizacja: 67 członków zespołów plemienia A × 7 repozytoriów;zezwól tylko dla własnego zespołu;zgodnych 469/469;WT1, RC1;tak

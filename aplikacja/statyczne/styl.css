@@ -1,0 +1,83 @@
+/* SoftNova IAM – prosty, czytelny wygląd do prezentacji */
+:root {
+  --tlo: #f5f6f8; --karta: #ffffff; --tekst: #1d2330; --szary: #667085; --linia: #dde1e7;
+  --akcent: #2f5bd3; --akcent-jasny: #e8eefc; --zielony: #1d7a46; --zielony-tlo: #e3f4ea;
+  --czerwony: #b42318; --czerwony-tlo: #fdecea; --zolty: #8a5a00; --zolty-tlo: #fff4d6;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background: var(--tlo);
+       color: var(--tekst); font-size: 15px; line-height: 1.45; }
+a { color: var(--akcent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+header { background: #19213a; color: #fff; padding: 10px 20px; display: flex; flex-wrap: wrap; gap: 12px 20px;
+         align-items: center; }
+header .logo { font-weight: 700; font-size: 17px; color: #fff; margin-right: 8px; }
+header nav { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
+header nav a { color: #c9d3ee; padding: 5px 10px; border-radius: 6px; font-size: 14px; }
+header nav a.aktywna, header nav a:hover { background: #2c3757; color: #fff; text-decoration: none; }
+.pasek { background: #fff; border-bottom: 1px solid var(--linia); padding: 8px 20px; display: flex; flex-wrap: wrap;
+         gap: 10px 22px; align-items: center; font-size: 14px; }
+.pasek form { display: inline-flex; gap: 6px; align-items: center; margin: 0; }
+.pasek select { max-width: 380px; }
+.zegar { font-weight: 600; }
+main { max-width: 1250px; margin: 0 auto; padding: 18px 20px 60px; }
+h1 { font-size: 22px; margin: 6px 0 14px; }
+h2 { font-size: 17px; margin: 0 0 10px; }
+h3 { font-size: 15px; margin: 14px 0 6px; }
+.opis { color: var(--szary); margin: -6px 0 16px; max-width: 900px; }
+
+.karta { background: var(--karta); border: 1px solid var(--linia); border-radius: 10px; padding: 16px 18px;
+         margin-bottom: 16px; }
+.siatka { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+.siatka > .karta { margin-bottom: 0; }
+
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--linia); vertical-align: top; }
+th { background: #f0f2f5; font-weight: 600; color: #344054; }
+tr:hover td { background: #fafbfc; }
+td.liczba, th.liczba { text-align: right; }
+
+label { display: block; font-size: 13px; color: #344054; margin: 8px 0 3px; font-weight: 600; }
+input, select, textarea { font: inherit; padding: 6px 8px; border: 1px solid #c3c9d3; border-radius: 6px;
+                          background: #fff; width: 100%; }
+.pasek input, .pasek select, td input, td select { width: auto; }
+.wiersz { display: flex; gap: 10px; flex-wrap: wrap; }
+.wiersz > div { flex: 1; min-width: 150px; }
+button, .przycisk { font: inherit; background: var(--akcent); color: #fff; border: none; border-radius: 6px;
+                    padding: 7px 14px; cursor: pointer; display: inline-block; margin-top: 10px; }
+button.drugorzedny { background: #e7eaf0; color: var(--tekst); }
+button.zielony { background: var(--zielony); }
+button.czerwony { background: var(--czerwony); }
+button.maly { padding: 3px 9px; margin: 0; font-size: 13px; }
+.pasek button { margin: 0; padding: 4px 10px; font-size: 13px; }
+.inline { display: inline; margin: 0; }
+
+.komunikat { border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; border: 1px solid; }
+.komunikat.ok { background: var(--zielony-tlo); border-color: #a6d8b9; color: var(--zielony); }
+.komunikat.blad { background: var(--czerwony-tlo); border-color: #f2b8b5; color: var(--czerwony); }
+
+.decyzja { border-radius: 10px; padding: 14px 18px; border: 2px solid; margin-bottom: 16px; }
+.decyzja.zezwol { background: var(--zielony-tlo); border-color: var(--zielony); }
+.decyzja.odmow { background: var(--czerwony-tlo); border-color: var(--czerwony); }
+.decyzja .wynik { font-size: 22px; font-weight: 700; }
+.decyzja.zezwol .wynik { color: var(--zielony); }
+.decyzja.odmow .wynik { color: var(--czerwony); }
+.decyzja ul { margin: 8px 0 0; padding-left: 20px; }
+
+.znacznik { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600;
+            background: var(--akcent-jasny); color: var(--akcent); margin: 1px 2px 1px 0; white-space: nowrap; }
+.znacznik.ok { background: var(--zielony-tlo); color: var(--zielony); }
+.znacznik.nie { background: var(--czerwony-tlo); color: var(--czerwony); }
+.znacznik.uwaga { background: var(--zolty-tlo); color: var(--zolty); }
+.sygnal { background: var(--zolty-tlo); color: var(--zolty); border-radius: 6px; padding: 6px 10px; margin: 4px 0;
+          font-size: 14px; }
+.drobny { color: var(--szary); font-size: 13px; }
+.kroki { counter-reset: krok; list-style: none; padding: 0; }
+.kroki li { margin: 4px 0; }
+details summary { cursor: pointer; color: var(--akcent); }
+code { background: #eef0f4; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+.osoby { columns: 3 300px; }
+.osoby .jednostka { break-inside: avoid; margin-bottom: 14px; }
+.osoby a { display: block; padding: 2px 0; }
+@media (max-width: 700px) { header nav { flex-basis: 100%; } .pasek select { max-width: 100%; } }

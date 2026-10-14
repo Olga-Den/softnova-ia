@@ -1,0 +1,26 @@
+﻿rola;nazwa;osób;uprawnienia roli (PA);śr. przypisań „przed”;śr. stałych, nie z roli
+B1;zarząd;3;7;12,0;0,0
+B2;prawnik;1;4;13,0;0,0
+B3;Inspektor Ochrony Danych;1;1;10,0;0,0
+B4;account manager;7;5;10,6;0,0
+B5;presales;3;2;7,0;0,0
+B6;wsparcie klienta;12;4;9,3;0,0
+B7;księgowy;5;5;10,4;0,0
+B8;kontroler;2;1;6,0;0,0
+B9;HR business partner;3;3;8,7;0,0
+B10;rekruter;4;4;9,0;0,0
+B11;specjalista kadr i płac;2;3;8,0;0,0
+B12;marketing;4;5;10,0;0,0
+B13;administracja biura;3;4;9,3;0,0
+T1;programista;60;15;23,1;2,8
+T2;stażysta-programista;8;6;23,0;12,0
+T3;tester;24;11;16,3;0,0
+T4;projektant UX / analityk;12;3;8,7;0,0
+T5;Product Owner;12;5;10,0;0,0
+T6;lider plemienia;3;5;13,0;0,0
+T7;chief architect;1;4;13,0;0,0
+T8;agile coach;2;3;5,0;0,0
+T9;DevOps/SRE;10;7;29,4;17,0
+T10;specjalista bezpieczeństwa;5;6;13,8;2,0
+T11;administrator IT;7;0;36,1;30,6
+T12;analityk danych / BI;5;3;8,6;0,0

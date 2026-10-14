@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block tytul %}start{% endblock %}
+{% block tresc %}
+<h1>Model zarządzania dostępem – organizacja SoftNova sp. z o.o.</h1>
+<p class="opis">Hybrydowy model RBAC + ABAC (wariant rolocentryczny) z rozdziałem obowiązków. Rola wyznacza maksymalny
+  zakres uprawnień, a atrybuty (zespół, klient, dyżur, urządzenie, upoważnienie RODO…) go zawężają. Każda decyzja ma
+  uzasadnienie i trafia do dziennika, którego nie da się zmienić.</p>
+
+<div class="siatka">
+  <div class="karta">
+    <h2>Jak korzystać</h2>
+    <ol class="kroki">
+      <li>1. Wybierz konto z listy u góry albo kliknij osobę poniżej – działasz w jej imieniu.</li>
+      <li>2. <a href="/decyzja">Sprawdź dostęp</a> do dowolnego obiektu – zobaczysz decyzję PDP i reguły.</li>
+      <li>3. <a href="/scenariusze">Scenariusze</a> SZ1–SZ10 uruchomisz jednym kliknięciem.</li>
+      <li>4. Procesy: <a href="/wnioski">wnioski</a>, <a href="/sesje">role w sesji i tryb awaryjny</a>,
+        <a href="/kadry">zdarzenia kadrowe</a>, <a href="/recertyfikacja">recertyfikacja</a>.</li>
+      <li>5. Przesuwaj zegar u góry, by zobaczyć wygasanie uprawnień; „Zadania codzienne” wykonują blokady i eskalacje.</li>
+      <li>6. Wszystko zapisuje się w <a href="/dziennik">dzienniku</a>.</li>
+    </ol>
+  </div>
+  <div class="karta">
+    <h2>Dane pokazu</h2>
+    <p>Obecnie: <strong>{{ 'przykładowa organizacja' if zbior == 'przyklad' else 'pełna organizacja (199 osób)' }}</strong>,
+      {{ stan.system.rejestr.uzytkownicy|length }} osób, {{ stan.system.rejestr.konta|length }} kont,
+      {{ stan.system.rejestr.obiekty|length }} obiektów, {{ stan.system.dziennik|length }} wpisów w dzienniku.
+      Baza: <code>{{ 'PostgreSQL' if stan.magazyn.postgres else 'SQLite' }}</code>.</p>
+    <form method="post" action="/demo/reset" onsubmit="return confirm('Utworzyć nową bazę? Obecny stan i dziennik zostaną usunięte.')">
+      <label for="zbior">Zacznij od nowa z danymi:</label>
+      <select id="zbior" name="zbior">
+        <option value="przyklad">przykładowa organizacja (kilkadziesiąt osób – postacie ze scenariuszy)</option>
+        <option value="pelna">pełna organizacja SoftNova (199 osób, generator)</option>
+      </select>
+      <button class="czerwony">Nowa baza</button>
+    </form>
+  </div>
+</div>
+
+<div class="karta" style="margin-top:16px">
+  <h2>Osoby i konta</h2>
+  <div class="osoby">
+    {% for jednostka, lista in jednostki.items() %}
+      <div class="jednostka">
+        <h3>{{ jednostka }}</h3>
+        {% for u, konta in lista %}
+          {% for k in konta %}
+            <a href="/zaloguj?konto={{ k.id }}&dalej=/decyzja">{{ u.imie_nazwisko }}{% if k.typ.value != 'zwykłe' %} <span class="znacznik uwaga">{{ k.typ.value }}</span>{% endif %}
+              <span class="drobny">– {{ ROLE[u.rola_funkcyjna].nazwa }}{% if u.zespol %}, {{ u.zespol }}{% endif %}{% if u.stanowisko %}, {{ u.stanowisko }}{% endif %}</span>
+              {% if not k.aktywne %}<span class="znacznik nie">zablokowane</span>{% endif %}</a>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

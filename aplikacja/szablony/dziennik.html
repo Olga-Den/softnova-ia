@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block tytul %}dziennik{% endblock %}
+{% block tresc %}
+<h1>Dziennik zdarzeń, sygnały i zadania przeglądu (WF-18, WN-05)</h1>
+<div class="siatka">
+  <div class="karta">
+    <h2>Integralność dziennika</h2>
+    <p>Wpisów w bazie: <strong>{{ liczba }}</strong>. Łańcuch skrótów SHA-256:
+      {% if lancuch %}<span class="znacznik ok">nienaruszony</span>{% else %}<span class="znacznik nie">NARUSZONY</span>{% endif %}</p>
+    <p class="drobny">Każdy wpis zawiera skrót poprzedniego. Wyzwalacz w bazie ({{ 'PostgreSQL' if postgres else 'SQLite' }})
+      blokuje UPDATE i DELETE{{ ' oraz TRUNCATE' if postgres }} na tabeli <code>dziennik</code> – także dla administratora aplikacji.</p>
+  </div>
+  <div class="karta">
+    <h2>Sygnały dla zespołu bezpieczeństwa</h2>
+    {% for c, t in sygnaly %}<div class="sygnal"><span class="drobny">{{ c|czas }}</span> {{ t }}</div>{% else %}<p class="drobny">Brak sygnałów.</p>{% endfor %}
+  </div>
+</div>
+
+<div class="karta" style="margin-top:16px">
+  <h2>Zadania przeglądu</h2>
+  <table><tr><th>Zadanie</th><th>Rodzaj</th><th>Opis</th><th>Recenzent</th><th>Termin</th><th>Status</th></tr>
+    {% for z in przeglady %}
+      <tr><td>{{ z.id }}</td><td>{{ z.rodzaj }}</td><td>{{ z.opis }}</td>
+        <td>{{ uzytkownicy[z.recenzent_id].imie_nazwisko if z.recenzent_id in uzytkownicy else z.recenzent_id }}</td>
+        <td>{{ z.termin|czas }}</td>
+        <td>{% if z.status == 'otwarte' %}<span class="znacznik uwaga">otwarte</span>
+            {% if uzytkownik and z.recenzent_id == uzytkownik.id %}<form class="inline" method="post" action="/przeglady/{{ z.id }}/zamknij"><button class="maly">Zamknij</button></form>{% endif %}
+          {% else %}<span class="znacznik ok">zamknięte</span>{% endif %}</td></tr>
+    {% else %}<tr><td colspan="6" class="drobny">Brak zadań.</td></tr>{% endfor %}
+  </table>
+</div>
+
+<div class="karta">
+  <h2>Ostatnie wpisy (od najnowszego)</h2>
+  <table><tr><th class="liczba">Nr</th><th>Czas</th><th>Zdarzenie</th><th>Dane</th></tr>
+    {% for w in wpisy %}
+      <tr><td class="liczba">{{ w.nr }}</td><td style="white-space:nowrap">{{ w.czas|czas }}</td>
+        <td><span class="znacznik {{ 'nie' if w.zdarzenie in ['naruszenie_SoD','sygnal'] or dict(w.dane).get('wynik') == 'odmów' else ('ok' if dict(w.dane).get('wynik') == 'zezwól' else '') }}">{{ w.zdarzenie }}</span></td>
+        <td class="drobny">{% for k, v in w.dane if v and k != 'uzasadnienie' %}<strong>{{ k }}</strong>={{ v }}; {% endfor %}
+          {% if dict(w.dane).get('uzasadnienie') %}<details><summary>uzasadnienie</summary>{{ dict(w.dane).uzasadnienie }}</details>{% endif %}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,214 @@
+erDiagram
+  zasoby {
+    varchar id PK
+    varchar nazwa
+    varchar klasa
+    boolean dane_osobowe
+    varchar wlasciciel_opis
+  }
+  role {
+    varchar id PK
+    varchar nazwa
+    varchar typ
+    varchar dziedziczy
+    varchar zasob_id FK
+    integer maks_godzin
+  }
+  uprawnienia_rol {
+    integer id PK
+    varchar rola_id
+    varchar zasob_id FK
+    varchar operacje
+    varchar reguly
+    varchar so
+    varchar typy_rekordu
+    varchar tylko_plemie
+  }
+  katalog {
+    integer id PK
+    varchar rola_id FK
+    varchar zasob_id FK
+    varchar operacje
+    varchar sposob
+    varchar typ_rekordu
+    varchar opis
+  }
+  uzytkownicy {
+    varchar id PK
+    varchar imie_nazwisko
+    varchar rola_funkcyjna FK
+    varchar poziom
+    varchar jednostka
+    varchar zespol
+    varchar plemie
+    varchar chapter
+    varchar stanowisko
+    varchar forma
+    date data_konca_umowy
+    varchar przelozony_id FK
+    varchar kierownik_umowy_id
+    boolean aktywny
+    varchar zespol_tymczasowy
+    varchar poprzedni_zespol
+    timestamp data_przeniesienia
+    timestamp data_zatrudnienia
+    timestamp ostatnia_aktywnosc
+    boolean wyznaczony_wynagrodzenia_zarzadu
+    json atrybuty
+  }
+  konta {
+    varchar id PK
+    varchar uzytkownik_id FK
+    varchar typ
+    boolean aktywne
+    varchar rola_id FK
+    timestamp zablokowane_o
+    varchar powod_blokady
+  }
+  przypisania_uprzywilejowane {
+    varchar uzytkownik_id PK
+    varchar rola_id PK
+  }
+  wlasciciele_zasobow {
+    varchar uzytkownik_id PK
+    varchar zasob_id PK
+  }
+  upowaznienia {
+    varchar uzytkownik_id PK
+    varchar zakres
+    timestamp od
+    timestamp do
+    timestamp odwolane_o
+  }
+  przydzialy {
+    integer id PK
+    varchar uzytkownik_id FK
+    varchar zasob_id FK
+    varchar operacje
+    varchar typ_rekordu
+    timestamp od
+    timestamp do
+    varchar wniosek_id
+    boolean awaryjny
+    timestamp ostatnia_recertyfikacja
+  }
+  sesje {
+    varchar id PK
+    varchar konto_id FK
+    varchar numer_zgloszenia
+  }
+  sesje_role {
+    varchar sesja_id PK
+    varchar rola_id PK
+    timestamp od
+    timestamp do
+  }
+  obiekty {
+    varchar id PK
+    varchar zasob_id FK
+    varchar nazwa
+    varchar zespol
+    varchar plemie
+    varchar jednostka
+    varchar klient
+    varchar typ_rekordu
+    varchar autor_id
+    varchar proces
+    float kwota
+    varchar dotyczy_osoby_id
+    varchar obslugujacy_id
+    boolean aktywna_oferta
+    date termin_przechowywania
+    varchar zrodlo_id
+    json atrybuty
+  }
+  wnioski {
+    varchar id PK
+    varchar wnioskujacy_id FK
+    varchar beneficjent_id FK
+    varchar zasob_id FK
+    varchar operacje
+    varchar typ_rekordu
+    text uzasadnienie
+    integer okres_dni
+    timestamp zlozony_o
+    varchar status
+    text powod
+    varchar reguly
+  }
+  wymagania_wnioskow {
+    integer id PK
+    varchar wniosek_id FK
+    varchar rola
+    json kandydaci
+    varchar udzielona_przez
+    timestamp czas
+  }
+  prosby {
+    varchar id PK
+    varchar rodzaj
+    json dane
+  }
+  zadania_przegladu {
+    varchar id PK
+    varchar rodzaj
+    text opis
+    varchar recenzent_id
+    timestamp utworzono
+    timestamp termin
+    varchar dotyczy
+    varchar status
+    timestamp zamknieto_o
+  }
+  pozycje_recertyfikacji {
+    varchar id PK
+    varchar uzytkownik_id
+    varchar rodzaj
+    varchar klucz
+    text opis
+    varchar recenzent_id
+    timestamp utworzono
+    timestamp ostatnie_uzycie
+    varchar status
+    timestamp rozstrzygnieto_o
+  }
+  sygnaly {
+    integer nr PK
+    timestamp czas
+    text tekst
+  }
+  dziennik {
+    integer nr PK
+    timestamp czas
+    varchar zdarzenie
+    json dane
+    varchar skrot_poprzedni
+    varchar skrot
+  }
+  ustawienia {
+    varchar klucz PK
+    json wartosc
+  }
+  zasoby ||--o{ role : "zasob_id"
+  zasoby ||--o{ uprawnienia_rol : "zasob_id"
+  zasoby ||--o{ katalog : "zasob_id"
+  role ||--o{ katalog : "rola_id"
+  role ||--o{ uzytkownicy : "rola_funkcyjna"
+  uzytkownicy ||--o{ uzytkownicy : "przelozony_id"
+  uzytkownicy ||--o{ konta : "uzytkownik_id"
+  role ||--o{ konta : "rola_id"
+  uzytkownicy ||--o{ przypisania_uprzywilejowane : "uzytkownik_id"
+  role ||--o{ przypisania_uprzywilejowane : "rola_id"
+  zasoby ||--o{ wlasciciele_zasobow : "zasob_id"
+  uzytkownicy ||--o{ wlasciciele_zasobow : "uzytkownik_id"
+  uzytkownicy ||--o{ upowaznienia : "uzytkownik_id"
+  uzytkownicy ||--o{ przydzialy : "uzytkownik_id"
+  zasoby ||--o{ przydzialy : "zasob_id"
+  konta ||--o{ sesje : "konto_id"
+  role ||--o{ sesje_role : "rola_id"
+  sesje ||--o{ sesje_role : "sesja_id"
+  zasoby ||--o{ obiekty : "zasob_id"
+  zasoby ||--o{ wnioski : "zasob_id"
+  uzytkownicy ||--o{ wnioski : "beneficjent_id"
+  uzytkownicy ||--o{ wnioski : "wnioskujacy_id"
+  wnioski ||--o{ wymagania_wnioskow : "wniosek_id"

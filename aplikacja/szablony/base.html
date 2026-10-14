@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SoftNova IAM – {% block tytul %}model zarządzania dostępem{% endblock %}</title>
+  <link rel="stylesheet" href="/statyczne/styl.css">
+</head>
+<body>
+<header>
+  <a class="logo" href="/">SoftNova IAM</a>
+  <nav>
+    {% for adres, nazwa in [("/", "Start"), ("/decyzja", "Sprawdź dostęp"), ("/scenariusze", "Scenariusze"),
+                             ("/wnioski", "Wnioski"), ("/sesje", "Sesje i tryb awaryjny"), ("/kadry", "Kadry"),
+                             ("/recertyfikacja", "Recertyfikacja"), ("/uprawnienia", "Wykazy"),
+                             ("/dziennik", "Dziennik"), ("/metryki", "Metryki")] %}
+      <a href="{{ adres }}" class="{{ 'aktywna' if (strona == 'start' and adres == '/') or adres == '/' ~ strona else '' }}">{{ nazwa }}</a>
+    {% endfor %}
+    <a href="/docs">API</a>
+  </nav>
+</header>
+<div class="pasek">
+  <form method="get" action="/zaloguj">
+    <label for="konto" style="margin:0">Konto:</label>
+    <select id="konto" name="konto" onchange="this.form.submit()">
+      <option value="">— wybierz, w czyim imieniu działasz —</option>
+      {% for jednostka, konta in grupy_kont.items() %}
+        <optgroup label="{{ jednostka }}">
+          {% for id, opis in konta %}<option value="{{ id }}" {{ 'selected' if id == konto }}>{{ opis }}</option>{% endfor %}
+        </optgroup>
+      {% endfor %}
+    </select>
+    <input type="hidden" name="dalej" value="/{{ '' if strona == 'start' else strona }}">
+  </form>
+  <span class="zegar">Czas systemu: {{ czas|czas }}</span>
+  <form method="post" action="/demo/czas"><input type="hidden" name="godziny" value="1"><button class="drugorzedny">+1 h</button></form>
+  <form method="post" action="/demo/czas"><input type="hidden" name="godziny" value="24"><button class="drugorzedny">+1 dzień</button></form>
+  <form method="post" action="/demo/czas"><input type="hidden" name="godziny" value="720"><button class="drugorzedny">+30 dni</button></form>
+  <form method="post" action="/demo/czas"><input type="hidden" name="godziny" value="4392"><button class="drugorzedny">+6 mies.</button></form>
+  <form method="post" action="/demo/codzienne"><button class="drugorzedny" title="koniec umów, wygasanie uprawnień, blokady po 45 dniach, eskalacje recertyfikacji">Zadania codzienne</button></form>
+  <span class="drobny">Dane: {{ 'przykład' if zbior == 'przyklad' else 'pełna organizacja (199 osób)' }}</span>
+</div>
+<main>
+  {% if komunikat %}
+    <div class="komunikat {{ 'ok' if komunikat.ok else 'blad' }}">
+      {{ komunikat.tekst }}
+      {% for r in komunikat.reguly %}<span class="znacznik {{ '' if komunikat.ok else 'nie' }}">{{ r }}</span>{% endfor %}
+    </div>
+  {% endif %}
+  {% if uzytkownik %}
+    <p class="drobny">Działasz jako <strong>{{ uzytkownik.imie_nazwisko }}</strong> –
+      {{ ROLE[uzytkownik.rola_funkcyjna].nazwa }}, {{ uzytkownik.poziom }}, {{ uzytkownik.jednostka }}{% if uzytkownik.zespol %}, zespół {{ uzytkownik.zespol }}{% endif %}
+      {% if uzytkownik.stanowisko %}({{ uzytkownik.stanowisko }}){% endif %}; konto <code>{{ konto }}</code>{% if not uzytkownik.aktywny %} <span class="znacznik nie">nieaktywny</span>{% endif %}</p>
+  {% endif %}
+  {% block tresc %}{% endblock %}
+</main>
+</body>
+</html>

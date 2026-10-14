@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block tytul %}sprawdź dostęp{% endblock %}
+{% block tresc %}
+<h1>Sprawdź dostęp – decyzja PDP</h1>
+<p class="opis">Formularz działa jak punkt egzekwowania polityki (PEP) w chronionym systemie: przekazuje żądanie do PDP,
+  który wyznacza decyzję w kolejności z podrozdziału 3.5.6 (warunki twarde → reguły zawężające → SoD → rola → reguła
+  rozszerzająca → domyślna odmowa).</p>
+
+{% if decyzja %}
+  <div class="decyzja {{ 'zezwol' if decyzja.zezwolono else 'odmow' }}">
+    <div class="wynik">{{ decyzja.wynik.value|upper }}</div>
+    <div>{{ uzytkownik.imie_nazwisko }} → <strong>{{ zadanie.operacja }}</strong> na „{{ obiekt.nazwa }}”
+      ({{ obiekt.zasob }} {{ ZASOBY[obiekt.zasob].nazwa }}, {{ ZASOBY[obiekt.zasob].klasa.name }}{% if ZASOBY[obiekt.zasob].dane_osobowe %}, dane osobowe{% endif %}).
+      Rozstrzygnięto w kroku {{ decyzja.krok }}.</div>
+    <ul>{% for linia in decyzja.uzasadnienie %}<li>{{ linia }}</li>{% endfor %}</ul>
+    {% for s in decyzja.sygnaly %}<div class="sygnal">⚠ {{ s }}</div>{% endfor %}
+  </div>
+{% endif %}
+
+{% if not konto %}
+  <div class="komunikat blad">Najpierw wybierz konto z listy u góry strony.</div>
+{% else %}
+<form method="post" action="/decyzja" class="karta">
+  <div class="wiersz">
+    <div style="flex:2">
+      <label for="obiekt">Obiekt</label>
+      <select id="obiekt" name="obiekt">
+        {% for grupa, lista in obiekty.items() %}
+          <optgroup label="{{ grupa }}">
+            {% for o in lista %}<option value="{{ o.id }}" {{ 'selected' if o.id == zadanie.obiekt }}>{{ o.nazwa }}{% if o.typ_rekordu %} [{{ o.typ_rekordu }}]{% endif %}</option>{% endfor %}
+          </optgroup>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="operacja">Operacja</label>
+      <select id="operacja" name="operacja">
+        {% for kod, nazwa in [("R","R – odczyt"),("W","W – zapis"),("M","M – modyfikacja"),("D","D – usunięcie"),("A","A – zatwierdzenie")] %}
+          <option value="{{ kod }}" {{ 'selected' if kod == zadanie.operacja }}>{{ nazwa }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="wiersz">
+    <div>
+      <label for="urzadzenie">Urządzenie</label>
+      <select id="urzadzenie" name="urzadzenie">
+        <option value="firmowe">firmowe</option>
+        <option value="prywatne" {{ 'selected' if zadanie.urzadzenie == 'prywatne' }}>prywatne</option>
+      </select>
+    </div>
+    <div>
+      <label for="siec">Sieć</label>
+      <select id="siec" name="siec">
+        {% for s in ["biuro", "VPN", "zewnętrzna"] %}<option value="{{ s }}" {{ 'selected' if s == zadanie.siec }}>{{ s }}</option>{% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="sesja">Sesja z rolą uprzywilejowaną</label>
+      <select id="sesja" name="sesja">
+        <option value="">— bez sesji —</option>
+        {% for x in sesje %}<option value="{{ x.id }}" {{ 'selected' if x.id == zadanie.sesja }}>{{ x.id }}: {{ x.aktywne_role.keys()|join(', ') }}</option>{% endfor %}
+      </select>
+    </div>
+  </div>
+  <button>Wyznacz decyzję</button>
+</form>
+{% endif %}
+{% endblock %}

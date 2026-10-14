@@ -1,0 +1,3 @@
+﻿pomiar;żądań;średnia [ms];mediana [ms];p95 [ms];p99 [ms];maks. [ms];próg p95 [ms]
+PDP (bez bazy danych);10000;0,045;0,041;0,082;0,155;0,459;< 10
+pełne żądanie przez API (SQLite);500;11,354;10,316;18,183;28,793;87,598;< 100

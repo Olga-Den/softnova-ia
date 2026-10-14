@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block tytul %}recertyfikacja{% endblock %}
+{% block tresc %}
+<h1>Recertyfikacja (WF-17)</h1>
+<p class="opis">KW3 – co 12 miesięcy, KW4 i role uprzywilejowane – co 6 miesięcy, dostęp B2B – co 3 miesiące (kierownik,
+  który zawarł umowę). Brak decyzji: po 14 dniach eskalacja do przełożonego recenzenta, po 30 dniach odebranie.
+  Przesuń zegar (np. +6 mies.), uruchom kampanię, a potem „Zadania codzienne”, by zobaczyć eskalację.</p>
+<form method="post" action="/recertyfikacja/uruchom"><button>Uruchom kampanię recertyfikacji (teraz)</button></form>
+
+{% if konto %}
+<div class="karta" style="margin-top:16px">
+  <h2>Do Twojej decyzji ({{ moje|length }})</h2>
+  {% if not moje %}<p class="drobny">Brak pozycji do przeglądu.</p>{% else %}
+  <table><tr><th>Pozycja</th><th>Osoba</th><th>Przypisanie</th><th>Ostatnie użycie</th><th></th></tr>
+    {% for p in moje %}
+      <tr><td>{{ p.id }} <span class="znacznik {{ 'uwaga' if p.status == 'eskalowana' else '' }}">{{ p.status }}</span></td>
+        <td>{{ uzytkownicy[p.uzytkownik_id].imie_nazwisko }}</td><td>{{ p.rodzaj }}: {{ p.opis }}</td>
+        <td>{{ p.ostatnie_uzycie|czas }}</td>
+        <td style="white-space:nowrap">
+          <form class="inline" method="post" action="/recertyfikacja/{{ p.id }}/potwierdz"><button class="maly zielony">Potwierdź</button></form>
+          <form class="inline" method="post" action="/recertyfikacja/{{ p.id }}/odbierz"><button class="maly czerwony">Odbierz</button></form></td></tr>
+    {% endfor %}
+  </table>{% endif %}
+</div>
+{% endif %}
+
+<div class="karta">
+  <h2>Wszystkie pozycje</h2>
+  <table><tr><th>Pozycja</th><th>Osoba</th><th>Przypisanie</th><th>Recenzent</th><th>Utworzono</th><th>Status</th></tr>
+    {% for p in pozycje %}
+      <tr><td>{{ p.id }}</td><td>{{ uzytkownicy[p.uzytkownik_id].imie_nazwisko }}</td><td>{{ p.rodzaj }}: {{ p.opis }}</td>
+        <td>{{ uzytkownicy[p.recenzent_id].imie_nazwisko }}</td><td>{{ p.utworzono|czas }}</td>
+        <td><span class="znacznik {{ 'ok' if p.status == 'potwierdzona' else ('nie' if p.status == 'odebrana' else 'uwaga') }}">{{ p.status }}</span></td></tr>
+    {% else %}<tr><td colspan="6" class="drobny">Brak – uruchom kampanię.</td></tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}

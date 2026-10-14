@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block tytul %}sesje i tryb awaryjny{% endblock %}
+{% block tresc %}
+<h1>Role uprzywilejowane, tryb awaryjny, zastępstwa</h1>
+<p class="opis">Nikt nie ma stałego dostępu uprzywilejowanego: rolę administratora aktywuje się w sesji (maks. 8 h, z konta
+  administracyjnego, dla Z13 i Z17 po akceptacji właściciela). Tryb awaryjny produkcji – 4 h, numer incydentu, alarm
+  i przegląd po fakcie. Nagłe zastępstwo – przełożony P2 nadaje na 72 h uprawnienie z katalogu.</p>
+{% if not konto %}<div class="komunikat blad">Najpierw wybierz konto z listy u góry strony.</div>{% else %}
+
+{% if prosby %}
+<div class="karta"><h2>Prośby o aktywację do Twojej akceptacji (właściciel zasobu)</h2>
+  <table><tr><th>Prośba</th><th>Konto</th><th>Rola</th><th>Zgłoszenie</th><th></th></tr>
+  {% for id, p in prosby.items() %}
+    <tr><td>{{ id }}</td><td>{{ p.konto }}</td><td>{{ ROLE[p.rola].nazwa }} ({{ p.godziny }} h)</td><td>{{ p.numer }}</td>
+      <td><form class="inline" method="post" action="/sesje/prosby/{{ id }}"><button class="maly zielony">Zatwierdź</button></form></td></tr>
+  {% endfor %}</table></div>
+{% endif %}
+
+{% if po_fakcie %}
+<div class="karta"><h2>Zastępstwa awaryjne do akceptacji po fakcie</h2>
+  {% for z in po_fakcie %}
+    <div>{{ z.opis }} <span class="drobny">termin {{ z.termin|czas }}</span>
+      <form class="inline" method="post" action="/zastepstwa/awaryjne/{{ z.dotyczy }}"><button class="maly zielony">Akceptuj (30 dni)</button></form></div>
+  {% endfor %}</div>
+{% endif %}
+
+<div class="siatka">
+  <div class="karta">
+    <h2>Aktywacja roli administratora</h2>
+    {% if konto_obj.typ.value != 'administracyjne' %}
+      <p class="drobny">Rolę uprzywilejowaną aktywuje się tylko z <strong>konta administracyjnego</strong> (WT4, WF-03).
+        {% if uzytkownik.role_uprzywilejowane %}Przełącz się na konto <code>{{ uzytkownik.id }}-adm</code>.{% else %}Ta osoba nie ma przypisanych ról uprzywilejowanych.{% endif %}
+        Próba z tego konta zostanie odrzucona.</p>
+    {% endif %}
+    <form method="post" action="/sesje/aktywuj">
+      <label for="rola">Rola</label>
+      <select id="rola" name="rola">
+        {% for r in uzytkownik.role_uprzywilejowane|sort %}<option value="{{ r }}">{{ ROLE[r].nazwa }} (maks. {{ ROLE[r].maks_godzin }} h{% if ROLE[r].wymaga_akceptacji_wlasciciela %}, akceptacja właściciela{% endif %})</option>{% endfor %}
+        {% if not uzytkownik.role_uprzywilejowane %}<option value="ADM_Z8">administrator Z8 (próba bez uprawnienia)</option>{% endif %}
+      </select>
+      <div class="wiersz">
+        <div><label for="godziny">Godzin</label><input id="godziny" name="godziny" type="number" value="8" min="1"></div>
+        <div><label for="numer">Numer zgłoszenia</label><input id="numer" name="numer" placeholder="np. ZGL-1024"></div>
+      </div>
+      <button>Aktywuj</button>
+    </form>
+  </div>
+
+  <div class="karta">
+    <h2>Tryb awaryjny produkcji (Z8)</h2>
+    <p class="drobny">Może uruchomić lider DevOps/SRE lub osoba pełniąca teraz dyżur. Każde użycie wywołuje alarm.</p>
+    <form method="post" action="/tryb-awaryjny">
+      <label for="numer_inc">Numer incydentu</label><input id="numer_inc" name="numer" placeholder="np. INC-77">
+      <button class="czerwony">Uruchom tryb awaryjny</button>
+    </form>
+  </div>
+
+  {% if uzytkownik.poziom == 'P2' and podwladni %}
+  <div class="karta">
+    <h2>Nagłe zastępstwo (72 h)</h2>
+    <form method="post" action="/zastepstwa/awaryjne">
+      <label for="beneficjent">Dla kogo</label>
+      <select id="beneficjent" name="beneficjent">{% for x in podwladni %}<option value="{{ x.id }}">{{ x.imie_nazwisko }} – {{ ROLE[x.rola_funkcyjna].nazwa }}</option>{% endfor %}</select>
+      <label for="pozycja">Uprawnienie z katalogu osoby (zasób|operacje|typ)</label>
+      <input id="pozycja" name="pozycja" value="Z9|R|sekret_projektu">
+      <button>Nadaj na 72 h</button>
+    </form>
+    <h3>Zastępca z uprawnieniami zatwierdzającymi (RE3)</h3>
+    <form method="post" action="/zastepstwa">
+      <div class="wiersz">
+        <div><label>Kogo zastępuje</label><select name="zastepowany">{% for x in podwladni %}<option value="{{ x.id }}">{{ x.imie_nazwisko }}</option>{% endfor %}</select></div>
+        <div><label>Zastępca</label><select name="zastepca">{% for x in podwladni %}<option value="{{ x.id }}">{{ x.imie_nazwisko }}</option>{% endfor %}</select></div>
+        <div><label>Dni (maks. 30)</label><input name="dni" type="number" value="7" min="1"></div>
+      </div>
+      <button>Wyznacz zastępcę</button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+
+<div class="karta" style="margin-top:16px">
+  <h2>Sesje</h2>
+  <table><tr><th>Sesja</th><th>Konto</th><th>Rola</th><th>Od – do</th><th>Zgłoszenie</th><th></th></tr>
+    {% for x in wszystkie_sesje %}{% for rola, o in x.aktywne_role.items() %}
+      <tr><td>{{ x.id }}</td><td>{{ x.konto_id }}</td><td>{{ ROLE[rola].nazwa }}</td>
+        <td>{{ o.od|czas }} – {{ o.do|czas }} {% if o.zawiera(czas) %}<span class="znacznik ok">aktywna</span>{% else %}<span class="znacznik">wygasła</span>{% endif %}</td>
+        <td>{{ x.numer_zgloszenia or '–' }}</td>
+        <td>{% if x.konto_id == konto and o.zawiera(czas) %}<form class="inline" method="post" action="/sesje/{{ x.id }}/zakoncz"><button class="maly drugorzedny">Zakończ</button></form>{% endif %}</td></tr>
+    {% endfor %}{% else %}<tr><td colspan="6" class="drobny">Brak sesji.</td></tr>{% endfor %}
+  </table>
+</div>
+{% endif %}
+{% endblock %}

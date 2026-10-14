@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block tytul %}kadry{% endblock %}
+{% block tresc %}
+<h1>Zdarzenia kadrowe (tabela 3.18)</h1>
+<p class="opis">Źródłem zdarzeń jest system kadrowy – w pokazie wprowadza je pracownik HR (zaloguj się jako HR business
+  partner lub specjalista kadr i płac). Model sam nadaje, zmienia i odbiera role, przydziały oraz upoważnienie RODO.</p>
+{% if not uzytkownik or uzytkownik.rola_funkcyjna not in ['B9', 'B11'] %}
+  <div class="komunikat blad">Zaloguj się jako pracownik HR – inne konta otrzymają odmowę.</div>
+{% endif %}
+
+{% macro osoba_select(nazwa='uzytkownik') %}
+  <select name="{{ nazwa }}">{% for o in osoby %}<option value="{{ o.id }}">{{ o.imie_nazwisko }} – {{ ROLE[o.rola_funkcyjna].nazwa }}{% if o.zespol %}, {{ o.zespol }}{% endif %}{% if not o.aktywny %} (nieaktywny){% endif %}</option>{% endfor %}</select>
+{% endmacro %}
+
+<div class="siatka">
+  <form method="post" action="/kadry/przeniesienie" class="karta">
+    <h2>Przeniesienie między zespołami</h2>
+    <label>Osoba</label>{{ osoba_select() }}
+    <div class="wiersz">
+      <div><label>Nowy zespół</label><select name="zespol">{% for z in zespoly %}<option>{{ z }}</option>{% endfor %}</select></div>
+      <div><label>Plemię</label><input name="plemie" placeholder="A / B / C"></div>
+    </div>
+    <div class="wiersz">
+      <div><label>Jednostka</label><select name="jednostka"><option value="">bez zmian</option>{% for j in jednostki %}<option>{{ j }}</option>{% endfor %}</select></div>
+      <div><label>Nowy przełożony</label><select name="przelozony"><option value="">bez zmian</option>{% for o in osoby %}{% if o.poziom in ['P1','P2','P3'] %}<option value="{{ o.id }}">{{ o.imie_nazwisko }}</option>{% endif %}{% endfor %}</select></div>
+    </div>
+    <button>Przenieś</button>
+  </form>
+
+  <form method="post" action="/kadry/zmiana-stanowiska" class="karta">
+    <h2>Zmiana stanowiska</h2>
+    <label>Osoba</label>{{ osoba_select() }}
+    <div class="wiersz">
+      <div><label>Nowa rola</label><select name="rola">{% for r in role_funkcyjne %}<option value="{{ r.id }}">{{ r.id }} {{ r.nazwa }}</option>{% endfor %}</select></div>
+      <div><label>Poziom</label><select name="poziom"><option value="">bez zmian</option>{% for p in ['P2','P3','P4','P5'] %}<option>{{ p }}</option>{% endfor %}</select></div>
+    </div>
+    <button>Zmień</button>
+  </form>
+
+  <form method="post" action="/kadry/odejscie" class="karta" onsubmit="return confirm('Odejście: blokada wszystkich kont i odebranie ról. Kontynuować?')">
+    <h2>Odejście z organizacji</h2>
+    <label>Osoba</label>{{ osoba_select() }}
+    <button class="czerwony">Zarejestruj odejście</button>
+  </form>
+
+  <form method="post" action="/kadry/przeniesienie-czasowe" class="karta">
+    <h2>Czasowe przeniesienie (embedding)</h2>
+    <label>Osoba</label>{{ osoba_select() }}
+    <label>Zespół docelowy</label><select name="zespol">{% for z in zespoly %}<option>{{ z }}</option>{% endfor %}</select>
+    <button>Przenieś czasowo</button>
+  </form>
+  <form method="post" action="/kadry/koniec-przeniesienia" class="karta">
+    <h2>Koniec czasowego przeniesienia</h2>
+    <label>Osoba</label>{{ osoba_select() }}
+    <button>Zakończ</button>
+  </form>
+
+  <form method="post" action="/kadry/dyzur" class="karta">
+    <h2>Dyżur (od teraz)</h2>
+    <label>Osoba</label>{{ osoba_select() }}
+    <label>Godzin</label><input name="godziny" type="number" value="12" min="1">
+    <button>Wpisz do grafiku</button>
+  </form>
+
+  <form method="post" action="/kadry/oswiadczenie-nda" class="karta">
+    <h2>Oświadczenie o poufności wobec klienta (WT1)</h2>
+    <label>Osoba</label>{{ osoba_select() }}
+    <label>Klient</label><select name="klient">{% for k in klienci %}<option>{{ k }}</option>{% endfor %}</select>
+    <button>Zarejestruj</button>
+  </form>
+
+  <form method="post" action="/kadry/zatrudnienie" class="karta">
+    <h2>Zatrudnienie</h2>
+    <div class="wiersz">
+      <div><label>Identyfikator</label><input name="uzytkownik" placeholder="np. jan.kowal"></div>
+      <div><label>Imię i nazwisko</label><input name="imie_nazwisko"></div>
+    </div>
+    <div class="wiersz">
+      <div><label>Rola</label><select name="rola">{% for r in role_funkcyjne %}<option value="{{ r.id }}">{{ r.id }} {{ r.nazwa }}</option>{% endfor %}</select></div>
+      <div><label>Poziom</label><select name="poziom">{% for p in ['P4','P3','P2','P5'] %}<option>{{ p }}</option>{% endfor %}</select></div>
+    </div>
+    <div class="wiersz">
+      <div><label>Jednostka</label><select name="jednostka">{% for j in jednostki %}<option>{{ j }}</option>{% endfor %}</select></div>
+      <div><label>Zespół</label><select name="zespol"><option value="">brak</option>{% for z in zespoly %}<option>{{ z }}</option>{% endfor %}</select></div>
+      <div><label>Plemię</label><input name="plemie" placeholder="A / B / C"></div>
+    </div>
+    <div class="wiersz">
+      <div><label>Forma</label><select name="forma"><option>umowa o pracę</option><option>B2B</option><option>staż</option></select></div>
+      <div><label>Koniec umowy</label><input name="koniec_umowy" type="date"></div>
+      <div><label>Przełożony</label><select name="przelozony"><option value="">brak</option>{% for o in osoby %}{% if o.poziom in ['P1','P2','P3'] %}<option value="{{ o.id }}">{{ o.imie_nazwisko }}</option>{% endif %}{% endfor %}</select></div>
+    </div>
+    <button>Zatrudnij</button>
+  </form>
+</div>
+{% endblock %}

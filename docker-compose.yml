@@ -1,0 +1,30 @@
+# Uruchomienie: docker compose up --build    →  http://localhost:8000
+services:
+  baza:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: softnova
+      POSTGRES_USER: softnova
+      POSTGRES_PASSWORD: softnova   # tylko do pokazu lokalnego – nie używać w produkcji
+    volumes:
+      - dane_bazy:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U softnova -d softnova"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  aplikacja:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://softnova:softnova@baza:5432/softnova
+      ZBIOR_DANYCH: przyklad        # przy pierwszym starcie: przyklad albo pelna
+    ports:
+      - "8000:8000"
+    depends_on:
+      baza:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  dane_bazy:

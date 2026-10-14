@@ -1,0 +1,8 @@
+# Aplikacja (FastAPI + baza danych). Rdzeń `dostep/` nie wymaga żadnych bibliotek.
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+sqlalchemy==2.0.36
+psycopg[binary]==3.2.3
+jinja2==3.1.4
+python-multipart==0.0.19
+httpx==0.28.1          # pomiar czasu przez API (M7)

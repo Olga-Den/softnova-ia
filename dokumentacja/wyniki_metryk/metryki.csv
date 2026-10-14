@@ -1,0 +1,11 @@
+﻿ID;metryka;wynik;oczekiwane;spełnione;wymagania
+M1;poprawność decyzji;100,0% (512/512);100%;True;WF-01–WF-14
+M2;skuteczność SoD;100,0% (95/95);100%;True;WF-08, WF-09
+M3;uprawnienia nadmiarowe;0;0;True;WF-16
+M4;stosunek ról do użytkowników;1 : 7,65 (26 ról / 199 osób);ok. 1 : 7,7;True;WN-03
+M5;liczba przypisań;0,213 ((522 UA + 198 PA) / 3383);< 1;True;WN-03
+M6;nieuzasadnione odmowy;0;0;True;WN-07
+M7;czas decyzji (95. percentyl);"PDP 0,082 ms; API 18,18 ms";"< 10 ms (PDP); < 100 ms (API)";True;WN-04
+M8;automatyzacja nadawania;"98,0% uprawnień bez wniosku; śr. 0,98 wniosku na osobę (maks.)";wysoki / niska;True;WN-07
+M9;kompletność dziennika;100,0% (64/64);100%;True;WF-18, WN-05
+M10;zawężenie uprawnień przez ABAC;83,3% (średnio dla ról T1–T5 i B4);> 0;True;WF-10

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block tytul %}metryki{% endblock %}
+{% block tresc %}
+<h1>Metryki administrowalności (WN-03)</h1>
+<p class="opis">Liczone na bieżących danych. Wartości z rozdziału 5 dotyczą pełnej organizacji (199 osób) – przełącz dane
+  na stronie startowej. Stan „przed” odtworzono z opisu w podrozdziale 3.2.</p>
+<div class="siatka">
+  <div class="karta"><h2>M4 – stosunek ról do użytkowników</h2>
+    <p style="font-size:22px"><strong>1 : {{ '%.2f'|format(st.m4)|replace('.', ',') }}</strong></p>
+    <p class="drobny">{{ st.role }} ról (rola bazowa + funkcyjne) / {{ st.uzytkownicy }} osób; oczekiwane ok. 1 : 7,7</p></div>
+  <div class="karta"><h2>M5 – liczba przypisań</h2>
+    <p style="font-size:22px"><strong>{{ '%.3f'|format(st.m5)|replace('.', ',') }}</strong></p>
+    <p class="drobny">({{ st.ua }} UA + {{ st.pa }} PA) / {{ st.przed }} przypisań bezpośrednich „przed”; oczekiwane &lt; 1</p></div>
+  <div class="karta"><h2>Uprawnienia stałe „przed”</h2>
+    <p>Nie wynikają z roli w modelu (tylko czasowe albo wcale): <strong>{{ st.stale_nie_z_roli }}</strong><br>
+      w tym ponad maksimum modelu: <strong>{{ st.ponad_maksimum }}</strong></p>
+    <p class="drobny">Pochodzenie: {% for k, v in st.przyczyny_przed|dictsort %}{{ k }} {{ v }}{{ ', ' if not loop.last }}{% endfor %}</p></div>
+</div>
+<div class="karta" style="margin-top:16px">
+  <h2>Role</h2>
+  <table><tr><th>Rola</th><th>Nazwa</th><th class="liczba">Osób</th><th class="liczba">Uprawnień roli (PA)</th>
+    <th class="liczba">Śr. uprawnień „przed”</th><th class="liczba">Śr. stałych, nie z roli</th></tr>
+    {% for w in st.na_role %}<tr><td>{{ w.rola }}</td><td>{{ w.nazwa }}</td><td class="liczba">{{ w.uzytkownicy }}</td>
+      <td class="liczba">{{ w.pa_po }}</td><td class="liczba">{{ '%.1f'|format(w.przed_srednio)|replace('.', ',') }}</td>
+      <td class="liczba">{{ '%.1f'|format(w.nie_z_roli_srednio)|replace('.', ',') }}</td></tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+﻿rodzaj;ograniczenie;próba;zablokowana
+SO (decyzja);SO3;SZ5a: księgowy sam zatwierdza przelew na rzecz fikcyjnego kontrahenta;True
+SO (decyzja);SO3;SZ5b: główna księgowa zatwierdza przelew, który sama przygotowała;True
+SO (decyzja);SO1;SZ7a: programista zatwierdza własną zmianę w kodzie;True
+SO (decyzja);SO2;SZ7b: programista zatwierdza własne wdrożenie na produkcję;True
+SO (decyzja);SO2;USL1: potok CI/CD wdraża wydanie, którego nikt nie zatwierdził;True
+SO (decyzja);SO1;tester zatwierdza zmianę w kodzie;True
+SO (decyzja);SO3;księgowy zatwierdza własny przelew;True
+SO (proces);SO6;akceptacja własnego wniosku;True
+SO (proces);SO6;druga akceptacja tej samej osoby (KW4 – dwie osoby);True
+SO (proces);SO6;wniosek za osobę, której nie jest się przełożonym;True
+SO (proces);SO8;autor zatwierdza własną zmianę katalogu;True
+SO (proces);SO6;nadanie roli uprzywilejowanej samemu sobie;True
+SS (przypisanie);SS1;administrator IT → administrator SIEM: filip.nowak;True
+SS (przypisanie);SS1;administrator IT → administrator SIEM: jakub.wieczorek;True
+SS (przypisanie);SS1;administrator IT → administrator SIEM: zofia.sowa;True
+SS (przypisanie);SS1;administrator IT → administrator SIEM: krzysztof.nowak;True
+SS (przypisanie);SS1;administrator IT → administrator SIEM: beata.szewczyk;True
+SS (przypisanie);SS1;administrator IT → administrator SIEM: hanna.bak;True
+SS (przypisanie);SS1;administrator IT → administrator SIEM: zofia.lis;True
+SS (przypisanie);SS1;specjalista bezpieczeństwa → administrator CRM: joanna.michalak;True
+SS (przypisanie);SS1;specjalista bezpieczeństwa → administrator CRM: maria.kolodziej;True
+SS (przypisanie);SS1;specjalista bezpieczeństwa → administrator CRM: krzysztof.zajac;True
+SS (przypisanie);SS1;specjalista bezpieczeństwa → administrator CRM: hanna.koziel;True
+SS (przypisanie);SS1;specjalista bezpieczeństwa → administrator CRM: krzysztof.kaczmarek;True
+SS (przypisanie);SS2;specjalista kadr i płac → księgowy: michal.bak;True
+SS (przypisanie);SS2;specjalista kadr i płac → księgowy: hanna.pietrzak;True
+SS (przypisanie);SS3;account manager → księgowy: agnieszka.szewczyk;True
+SS (przypisanie);SS3;account manager → księgowy: filip.szulc;True
+SS (przypisanie);SS3;account manager → księgowy: oliwia.kubiak;True
+SS (przypisanie);SS3;account manager → księgowy: katarzyna.wrona;True
+SS (przypisanie);SS3;account manager → księgowy: katarzyna.duda;True
+SS (przypisanie);SS3;account manager → księgowy: pawel.wieczorek;True
+SS (przypisanie);SS3;account manager → księgowy: magdalena.duda;True
+SS (przypisanie);SS4;programista → administrator produkcji: magdalena.lis;True
+SS (przypisanie);SS4;programista → administrator produkcji: barbara.kolodziej;True
+SS (przypisanie);SS4;programista → administrator produkcji: pawel.krol;True
+SS (przypisanie);SS4;programista → administrator produkcji: wojciech.sobczak;True
+SS (przypisanie);SS4;programista → administrator produkcji: jakub.sowa;True
+SS (przypisanie);SS4;programista → administrator produkcji: natalia.wrona;True
+SS (przypisanie);SS4;programista → administrator produkcji: szymon.kolodziej;True
+SS (przypisanie);SS4;programista → administrator produkcji: piotr.wrona;True
+SS (przypisanie);SS4;programista → administrator produkcji: grzegorz.michalak;True
+SS (przypisanie);SS4;programista → administrator produkcji: aleksandra.wrobel;True
+SS (przypisanie);SS4;programista → administrator produkcji: piotr.duda;True
+SS (przypisanie);SS4;programista → administrator produkcji: michal.wrona;True
+SS (przypisanie);SS4;programista → administrator produkcji: joanna.sobczak;True
+SS (przypisanie);SS4;programista → administrator produkcji: grzegorz.sowa;True
+SS (przypisanie);SS4;programista → administrator produkcji: adam.krawczyk;True
+SS (przypisanie);SS4;programista → administrator produkcji: igor.wrona;True
+SS (przypisanie);SS4;programista → administrator produkcji: wojciech.urban;True
+SS (przypisanie);SS4;programista → administrator produkcji: mateusz.dudek;True
+SS (przypisanie);SS4;programista → administrator produkcji: karolina.urban;True
+SS (przypisanie);SS4;programista → administrator produkcji: dorota.glowacz;True
+SS (przypisanie);SS4;programista → administrator produkcji: zofia.dudek;True
+SS (przypisanie);SS4;programista → administrator produkcji: rafal.walczak;True
+SS (przypisanie);SS4;programista → administrator produkcji: krzysztof.bak;True
+SS (przypisanie);SS4;programista → administrator produkcji: anna.szulc;True
+SS (przypisanie);SS4;programista → administrator produkcji: grzegorz.adamczyk;True
+SS (przypisanie);SS4;programista → administrator produkcji: sebastian.sowa;True
+SS (przypisanie);SS4;programista → administrator produkcji: karolina.adamczyk;True
+SS (przypisanie);SS4;programista → administrator produkcji: jakub.bak;True
+SS (przypisanie);SS4;programista → administrator produkcji: kamil.bak;True
+SS (przypisanie);SS4;programista → administrator produkcji: rafal.wrona;True
+SS (przypisanie);SS4;programista → administrator produkcji: lukasz.szulc;True
+SS (przypisanie);SS4;programista → administrator produkcji: hanna.krol;True
+SS (przypisanie);SS4;programista → administrator produkcji: tomasz.walczak;True
+SS (przypisanie);SS4;programista → administrator produkcji: tomasz.szewczyk;True
+SS (przypisanie);SS4;programista → administrator produkcji: bartosz.duda;True
+SS (przypisanie);SS4;programista → administrator produkcji: wojciech.walczak;True
+SS (przypisanie);SS4;programista → administrator produkcji: michal.krol;True
+SS (przypisanie);SS4;programista → administrator produkcji: jakub.mazurek;True
+SS (przypisanie);SS4;programista → administrator produkcji: andrzej.koziel;True
+SS (przypisanie);SS4;programista → administrator produkcji: krzysztof.michalak;True
+SS (przypisanie);SS4;programista → administrator produkcji: wojciech.pietrzak;True
+SS (przypisanie);SS4;programista → administrator produkcji: weronika.wieczorek;True
+SS (przypisanie);SS4;programista → administrator produkcji: marcin.mazurek;True
+SS (przypisanie);SS4;programista → administrator produkcji: igor.wieczorek;True
+SS (przypisanie);SS4;programista → administrator produkcji: agnieszka.kurek;True
+SS (przypisanie);SS4;programista → administrator produkcji: aleksandra.urban;True
+SS (przypisanie);SS4;programista → administrator produkcji: rafal.marciniak;True
+SS (przypisanie);SS4;programista → administrator produkcji: adam.baran;True
+SS (przypisanie);SS4;programista → administrator produkcji: igor.urban;True
+SS (przypisanie);SS4;programista → administrator produkcji: maria.lis;True
+SS (przypisanie);SS4;programista → administrator produkcji: lukasz.glowacz;True
+SS (przypisanie);SS4;programista → administrator produkcji: filip.krawczyk;True
+SS (przypisanie);SS4;programista → administrator produkcji: sebastian.duda;True
+SS (przypisanie);SS4;programista → administrator produkcji: bartosz.wojcik;True
+SS (przypisanie);SS4;programista → administrator produkcji: tomasz.kowalczyk;True
+SS (przypisanie);SS4;programista → administrator produkcji: grzegorz.dudek;True
+SS (przypisanie);SS4;programista → administrator produkcji: lukasz.wieczorek;True
+SS (przypisanie);SS4;programista → administrator produkcji: adam.wrona;True
+SS (przypisanie);SS4;programista → administrator produkcji: sebastian.dudek;True
+SS (przypisanie);SS4;programista → administrator produkcji: filip.marciniak;True
+SS (przypisanie);SS5;właściciel Z8 → administrator Z8: barbara.sobczak;True
+SS (przypisanie);SS5;właściciel Z17 → administrator Z17: joanna.michalak;True

@@ -1,0 +1,22 @@
+﻿operacja;zdarzeń;wpisy w dzienniku;zarejestrowane
+żądania dostępu (decyzje PDP);44;44;tak
+wniosek – akceptacja właściciela i realizacja;1;zmiana_przypisania;tak
+przypisanie roli uprzywilejowanej;1;zmiana_przypisania;tak
+aktywacja roli (po akceptacji właściciela);1;aktywacja_roli;tak
+aktywacja roli administratora Z10;1;aktywacja_roli;tak
+tryb awaryjny produkcji;1;tryb_awaryjny;tak
+zastępstwo awaryjne 72 h;1;tryb_awaryjny;tak
+wyznaczenie zastępcy (RE3);1;zmiana_przypisania;tak
+zmiana katalogu (SO8);1;zmiana_katalogu;tak
+oświadczenie NDA;1;zdarzenie_kadrowe, zmiana_przypisania;tak
+przeniesienie;1;zdarzenie_kadrowe, zmiana_przypisania;tak
+czasowe przeniesienie;1;zdarzenie_kadrowe, zmiana_przypisania;tak
+koniec czasowego przeniesienia;1;zdarzenie_kadrowe, zmiana_przypisania;tak
+zmiana stanowiska;1;zdarzenie_kadrowe, zmiana_przypisania;tak
+dyżur;1;zdarzenie_kadrowe, zmiana_przypisania;tak
+odejście;1;zdarzenie_kadrowe, zmiana_przypisania;tak
+zatrudnienie;1;zdarzenie_kadrowe, zmiana_przypisania;tak
+zadania codzienne (koniec umów, wygasanie);1;zdarzenie_kadrowe, zmiana_przypisania;tak
+recertyfikacja – odebranie (Z9:R:sekret_projektu (wniosek WN-1));1;recertyfikacja, zmiana_przypisania;tak
+recertyfikacja – odebranie (administrator Z10);1;recertyfikacja, zmiana_przypisania;tak
+zadania codzienne po 6 miesiącach (blokady, wygasanie);1;blokada_konta, zdarzenie_kadrowe, zmiana_przypisania;tak
